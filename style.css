@@ -1,0 +1,339 @@
+/* Reset margin dan padding */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* font-family diatur secara global pada elemen body */
+}
+
+body {
+  /* Gunakan warna latar belakang terang untuk tampilan yang lebih bersih */
+  background-image: url('bck.jpg');
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Gaya umum kontainer halaman */
+/* Set setiap halaman (div dengan class page) menjadi relatif
+ * agar tombol kembali dapat ditempatkan di pojok kanan bawah
+ */
+/* Setiap halaman sebagai sebuah kartu konten dengan latar putih dan bayangan */
+.page {
+  display: none;
+  min-height: calc(100vh - 80px); /* kurangi tinggi navbar */
+  padding: 40px;
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin: 20px auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.page.active {
+  display: block;
+}
+
+/* Bar judul */
+/* Judul halaman (bagian dalam kartu konten) */
+.header {
+  background-color: transparent;
+  color: #00f57b;
+  padding: 10px 0;
+  font-size: 2rem;
+  font-family: 'Montserrat', sans-serif;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+/*
+ * Pembungkus konten untuk perataan tengah.
+ * Disesuaikan ke flex-start agar elemen rata kiri dan menggunakan
+ * lebar penuh untuk mengurangi ruang kosong.
+ */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  gap: 20px;
+  min-height: calc(100vh - 200px);
+  justify-content: center;
+}
+
+/* Khusus halaman dashboard, letakkan tombol menu di tengah area
+   antara header dan tepi bawah layar dengan meratakan isi secara vertikal */
+#dashboard .content {
+  justify-content: center;
+}
+
+/* Khusus halaman manajemen tugas, pusatkan tombol menu secara vertikal
+   dengan memberi tinggi minimum yang cukup agar menu berada di tengah. */
+/* Atur halaman manajemen tugas sebagai flex container agar konten mengisi sisa
+   tinggi layar. Kemudian, ratakan tombol menu ke tengah secara vertikal.
+   Header berada di atas dan konten mengambil seluruh ruang kosong di bawahnya. */
+/* Untuk halaman manajemen tugas, kita tidak mengubah struktur flex tingkat atas
+   agar event tombol tetap berfungsi. Sebagai gantinya, kita memberi tinggi
+   minimum dan meratakan isi secara vertikal sehingga tombol menu berada
+   lebih ke tengah halaman. */
+#manajemenMenu .content {
+}
+
+/* Navigasi atas */
+.top-nav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.top-nav .logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00f57b;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  color: #333333;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: color 0.2s ease, border-bottom 0.2s ease;
+}
+
+.nav-link:hover {
+  color:  #00f57b;
+  text-decoration: underline;
+}
+
+/* Gaya tombol modern dengan gradien, bayangan, dan animasi hover */
+/* Gaya tombol untuk menu utama, aksi, dan status */
+.menu-btn,
+.action-btn,
+.status-btn {
+  background-image: url('bck1.jpg');
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  padding: 15px 25px;
+  margin: 10px ;
+  font-size: 1.1rem;
+  width: 80%;
+  max-width: 400px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-btn:hover,
+.action-btn:hover,
+.status-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Gaya tombol kembali */
+/* Gaya tombol kembali diletakkan di pojok kanan bawah halaman */
+.back-btn {
+  background: none;
+  border: none;
+  color: #666666;
+  font-size: 1rem;
+  cursor: pointer;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  text-decoration: underline;
+}
+
+/* Gaya bidang input dan area teks */
+.input-group {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-label {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.input-field,
+.textarea-field {
+  background-color: #e8e8e8;
+  border: 2px solid #28a745;
+  border-radius: 15px;
+  padding: 10px;
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+}
+
+.textarea-field {
+  resize: vertical;
+  height: 120px;
+}
+
+/* Gaya tabel untuk daftar */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+thead tr {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+tbody tr {
+  background-color: #d1d1d1;
+  cursor: pointer;
+}
+
+tbody tr:hover {
+  background-color: #c0c0c0;
+}
+
+/* Kontainer tombol status */
+.status-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.status-btn {
+  flex: 1;
+  min-width: 160px;
+}
+
+/* Gaya pesan peringatan */
+/* CSS untuk alert */
+.alert {
+  background-color: #4CAF50; /* Hijau */
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  font-size: 1.1rem;
+  display: none; /* Default sembunyikan */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Animasi saat muncul */
+.alert.show {
+  display: block;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Ketika alert dihapus atau dihilangkan */
+.alert.hide {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+
+/* Tampilan antrian tugas */
+.queue {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.queue-title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.queue-list {
+  background-color: #ffdede;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.queue-item {
+  margin: 5px 0;
+  padding: 5px 10px;
+  background-color: #ffb3b3;
+  border-radius: 10px;
+}
+
+/* Gaya untuk gambar spanduk yang digunakan di seluruh aplikasi */
+.page-banner {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  margin: 0 auto 20px auto;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/*
+ * Gambar latar untuk setiap halaman
+ *
+ * Untuk memperindah tampilan tanpa menambah elemen <img> di HTML,
+ * setiap halaman menggunakan gambar dekoratif sebagai latar belakang.
+ * Gambar akan ditempatkan di sudut kanan atas dan tidak akan diulang.
+ * Ukuran gambar disesuaikan agar tetap proporsional di berbagai resolusi.
+ */
+
+/* Halaman tidak menggunakan gambar dekoratif per halaman lagi. */
+/* CSS untuk alert dengan animasi */
+.alert {
+    background-color: #4CAF50; /* Hijau */
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-size: 1.1rem;
+    display: none; /* Default sembunyikan */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Animasi saat muncul */
+.alert.show {
+    display: block;
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Ketika alert dihapus atau dihilangkan */
+.alert.hide {
+    transform: translateX(100%);
+    opacity: 0;
+}

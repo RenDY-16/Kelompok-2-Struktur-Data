@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Manajemen Tugas & Catatan</title>
+  <!-- Stylesheet eksternal -->
+  <link rel="stylesheet" href="style.css">
+    <!-- Impor font modern: Poppins untuk teks isi dan Montserrat untuk judul -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigasi Atas -->
+  <header class="top-nav">
+    <div class="logo">Manajemen Tugas</div>
+    <nav class="nav-links">
+      <button class="nav-link" data-go="dashboard">Beranda</button>
+      <button class="nav-link" data-go="manajemenMenu">Manajemen Tugas</button>
+      <button class="nav-link" data-go="catatanMenu">Catatan Pembelajaran</button>
+    </nav>
+  </header>
+
+  <!-- Halaman Dashboard -->
+  <div id="dashboard" class="page active">
+    <div class="header">DASHBOARD</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <button id="toManajemen" class="menu-btn">Management Tugas</button>
+      <button id="toCatatan" class="menu-btn">Catatan Pembelajaran</button>
+      <!-- Antrian tugas mendekati deadline -->
+      <div id="queueTasks" class="queue" style="display:none;">
+        <div class="queue-title">Tugas mendekati deadline:</div>
+        <div id="queueList" class="queue-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Manajemen Tugas -->
+  <div id="manajemenMenu" class="page">
+    <div class="header">Management Tugas</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <button id="toInputTugas" class="menu-btn">Input Tugas</button>
+      <button id="toStatusTugas" class="menu-btn">Status Tugas</button>
+      <button id="toDeadlineTugas" class="menu-btn">Deadline Tugas</button>
+      <button class="back-btn" data-back="dashboard">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Input Tugas -->
+  <div id="inputTugasPage" class="page">
+    <div class="header">Input Tugas</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <div id="taskAlert" class="alert" style="display:none;"></div>
+      <div class="input-group">
+        <label class="input-label" for="taskName">Nama Tugas</label>
+        <input class="input-field" type="text" id="taskName" placeholder="Masukkan Nama Tugas" />
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="taskDesc">Deskripsi Tugas</label>
+        <textarea class="textarea-field" id="taskDesc" placeholder="Masukkan Deskripsi Tugas"></textarea>
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="taskDeadline">Deadline (YYYY-MM-DD)</label>
+        <input class="input-field" type="date" id="taskDeadline" placeholder="YYYY-MM-DD" />
+      </div>
+      <button id="submitTask" class="action-btn">Submit</button>
+      <button class="back-btn" data-back="manajemenMenu">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Status Tugas -->
+  <div id="statusTugasPage" class="page">
+    <div class="header">Status Tugas</div>
+    <div class="content">
+      <!-- Background image is handled via CSS -->
+      <div id="statusAlert" class="alert" style="display:none;"></div>
+      <table id="statusTable">
+        <thead>
+          <tr><th>No</th><th>Nama</th><th>Deadline</th><th>Status</th><th>Deskripsi</th></tr>
+        </thead>
+        <tbody>
+          <!-- Baris tugas ditambahkan secara dinamis -->
+        </tbody>
+      </table>
+      <div class="status-container" id="statusButtons" style="display:none;">
+        <button class="status-btn" data-status="Belum dikerjakan">Belum dikerjakan</button>
+        <button class="status-btn" data-status="Sedang dikerjakan">Sedang dikerjakan</button>
+        <button class="status-btn" data-status="Telah dikerjakan">Telah dikerjakan</button>
+      </div>
+      <button class="back-btn" data-back="manajemenMenu">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Deadline Tugas -->
+  <div id="deadlineTugasPage" class="page">
+    <div class="header">Deadline Tugas</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <div id="deadlineAlert" class="alert" style="display:none;"></div>
+      <table id="deadlineTable">
+        <thead>
+          <tr><th>No</th><th>Nama</th><th>Deadline</th></tr>
+        </thead>
+        <tbody>
+          <!-- Baris ditambahkan secara dinamis -->
+        </tbody>
+      </table>
+      <div id="deadlineForm" style="display:none;">
+        <div class="input-group">
+          <label class="input-label" for="newDeadline">Set Waktu Deadline (YYYY-MM-DD)</label>
+          <input class="input-field" type="text" id="newDeadline" placeholder="YYYY-MM-DD" />
+        </div>
+        <button id="updateDeadline" class="action-btn">Update Deadline</button>
+      </div>
+      <button class="back-btn" data-back="manajemenMenu">Back</button>
+    </div>
+  </div>
+
+  <!-- Menu Catatan -->
+  <div id="catatanMenu" class="page">
+    <div class="header">Catatan Pembelajaran</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <button id="toInputCatatan" class="menu-btn">Input Catatan</button>
+      <button id="toEditCatatan" class="menu-btn">Edit Catatan</button>
+      <button id="toLihatCatatan" class="menu-btn">Lihat Catatan</button>
+      <button class="back-btn" data-back="dashboard">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Input Catatan -->
+  <div id="inputCatatanPage" class="page">
+    <div class="header">Input Catatan</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <div id="noteAlert" class="alert" style="display:none;"></div>
+      <div class="input-group">
+        <label class="input-label" for="noteTitle">Masukkan Judul</label>
+        <input class="input-field" type="text" id="noteTitle" placeholder="Masukkan Judul" />
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="noteContent">Masukkan Isi</label>
+        <textarea class="textarea-field" id="noteContent" placeholder="Masukkan Isi"></textarea>
+      </div>
+      <button id="saveNote" class="action-btn">Simpan</button>
+      <button class="back-btn" data-back="catatanMenu">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Pilih Catatan untuk Diedit -->
+  <div id="editCatatanSelectPage" class="page">
+    <div class="header">Edit Catatan</div>
+    <div class="content">
+      <!-- Background image is handled via CSS -->
+      <table id="editCatatanTable">
+        <thead>
+          <tr><th>No</th><th>Judul</th></tr>
+        </thead>
+        <tbody>
+          <!-- Catatan ditambahkan di sini -->
+        </tbody>
+      </table>
+      <button class="back-btn" data-back="catatanMenu">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Formulir Edit Catatan -->
+  <div id="editCatatanFormPage" class="page">
+    <div class="header">Edit Catatan</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <div class="input-group">
+        <label class="input-label" for="editNoteTitle">Judul</label>
+        <input class="input-field" type="text" id="editNoteTitle" />
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="editNoteContent">Isi</label>
+        <textarea class="textarea-field" id="editNoteContent"></textarea>
+      </div>
+      <button id="updateNote" class="action-btn">Simpan</button>
+      <button class="back-btn" data-back="editCatatanSelectPage">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Lihat Catatan -->
+  <div id="lihatCatatanPage" class="page">
+    <div class="header">Lihat Catatan</div>
+    <div class="content">
+      <!-- Background image is handled via CSS -->
+      <table id="lihatCatatanTable">
+        <thead>
+          <tr><th>No</th><th>Judul</th></tr>
+        </thead>
+        <tbody>
+          <!-- Catatan ditambahkan di sini -->
+        </tbody>
+      </table>
+      <button class="back-btn" data-back="catatanMenu">Back</button>
+    </div>
+  </div>
+
+  <!-- Halaman Detail Catatan -->
+  <div id="noteDetailPage" class="page">
+    <div class="header">Detail Catatan</div>
+    <div class="content">
+      <!-- Gambar latar ditangani melalui CSS -->
+      <h2 id="detailJudul"></h2>
+      <p id="detailIsi" style="white-space: pre-wrap; margin-top: 20px;"></p>
+      <button class="back-btn" data-back="lihatCatatanPage">Back</button>
+    </div>
+  </div>
+
+  <!-- Skrip eksternal -->
+  <script src="script.js"></script>
+</body>
+</html>
