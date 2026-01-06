@@ -80,8 +80,6 @@ body {
    agar event tombol tetap berfungsi. Sebagai gantinya, kita memberi tinggi
    minimum dan meratakan isi secara vertikal sehingga tombol menu berada
    lebih ke tengah halaman. */
-#manajemenMenu .content {
-}
 
 /* Navigasi atas */
 .top-nav {
@@ -337,3 +335,77 @@ tbody tr:hover {
     transform: translateX(100%);
     opacity: 0;
 }
+
+/*
+ * Responsiveness adjustments
+ *
+ * Pada tampilan layar kecil seperti ponsel, beberapa elemen tampilan
+ * perlu diubah agar tata letak tetap nyaman dibaca. Media query
+ * di bawah ini mengatur ulang ukuran dan susunan navigasi, tombol,
+ * kartu halaman dan teks untuk perangkat dengan lebar maksimum 600px.
+ */
+@media screen and (max-width: 600px) {
+  /* Susun elemen di bar navigasi ke bawah untuk menghindari tumpukan
+     teks yang memecah huruf. Logo tetap berada di atas, diikuti menu
+     navigasi di bawahnya. */
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 20px;
+  }
+
+  /* Atur teks logo agar lebih kecil agar muat di layar kecil */
+  .top-nav .logo {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  /* Tampilkan link navigasi sebagai kolom vertikal dan lebarkan agar
+     setiap item mengambil lebar penuh. Ini mencegah kata seperti
+     "Manajemen Tugas" terpotong atau dipaksa ke baris berikutnya. */
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .nav-link {
+    text-align: left;
+    padding: 10px 0;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  /* Lebarkan tombol menu dan aksi sehingga menempati seluruh lebar
+     kontainer. Juga kurangi margin dan padding untuk menghemat ruang. */
+  .menu-btn,
+  .action-btn,
+  .status-btn {
+    width: 100%;
+    max-width: none;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 1rem;
+  }
+
+  /* Perkecil ukuran tabel agar konten tetap berada di dalam viewport. */
+  table,
+  th,
+  td {
+    font-size: 0.9rem;
+  }
+
+  /* Lebarkan kartu halaman dan kurangi padding supaya pas di layar kecil */
+  .page {
+    width: 95%;
+    padding: 20px;
+  }
+
+  /* Pastikan konten tidak terlalu jauh ke bawah dengan meminimalkan
+     tinggi minimum. */
+  .content {
+    min-height: auto;
+    justify-content: flex-start;
+  }
+}
+
