@@ -386,6 +386,25 @@ document.getElementById('statusTable').addEventListener('click', (e) => {
   document.getElementById('statusButtons').style.display = 'flex';
 });
 
+// Fungsi untuk menghapus tugas yang telah selesai
+function hapusTugasSelesai() {
+  let currentNode = daftarTugas.head;
+  while (currentNode) {
+    if (currentNode.data.status === "Selesai") {
+      daftarTugas.remove(currentNode); // Hapus tugas dari Linked List
+    }
+    currentNode = currentNode.next;
+  }
+  simpanData(); // Perbarui localStorage setelah penghapusan
+}
+
+// Menambahkan fungsi untuk memeriksa dan menghapus tugas yang telah selesai
+function periksaTugasSelesai() {
+  hapusTugasSelesai();
+  tampilkanTabelStatus(); // Memperbarui tampilan tabel setelah penghapusan
+}
+
+
 // Ubah status tugas melalui tombol status
 document.getElementById('statusButtons').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
@@ -396,7 +415,13 @@ document.getElementById('statusButtons').addEventListener('click', (e) => {
   alert('Status tugas diperbarui');
   // simpan perubahan status ke localStorage
   simpanData();
+  
+  // Periksa dan hapus tugas yang sudah selesai
+  if (status === 'Selesai') {
+    periksaTugasSelesai();
+  }
 });
+
 
 // Klik baris pada tabel deadline
 document.getElementById('deadlineTable').addEventListener('click', (e) => {
