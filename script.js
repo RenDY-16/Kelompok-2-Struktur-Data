@@ -144,6 +144,23 @@ function muatData() {
   }
 }
 
+// ---------------------- Penghapusan Tugas Selesai ----------------------
+// Fungsi untuk menghapus semua tugas yang statusnya menandakan sudah selesai.
+// Status yang dianggap selesai adalah "Telah dikerjakan" atau "Selesai".
+function hapusTugasSelesai() {
+  let current = daftarTugas.head;
+  while (current) {
+    // simpan referensi ke node berikutnya sebelum ada kemungkinan perubahan
+    const nextNode = current.next;
+    const status = current.data.status;
+    if (status === 'Telah dikerjakan' || status === 'Selesai') {
+      // hapus node dari linked list
+      daftarTugas.remove(current);
+    }
+    current = nextNode;
+  }
+}
+
 // Variabel untuk simpul yang sedang dipilih
 let simpulTugasDipilih = null;
 let simpulCatatanDipilih = null;
@@ -386,42 +403,31 @@ document.getElementById('statusTable').addEventListener('click', (e) => {
   document.getElementById('statusButtons').style.display = 'flex';
 });
 
-// Fungsi untuk menghapus tugas yang telah selesai
-function hapusTugasSelesai() {
-  let currentNode = daftarTugas.head;
-  while (currentNode) {
-    if (currentNode.data.status === "Selesai") {
-      daftarTugas.remove(currentNode); // Hapus tugas dari Linked List
-    }
-    currentNode = currentNode.next;
-  }
-  simpanData(); // Perbarui localStorage setelah penghapusan
-}
-
-// Menambahkan fungsi untuk memeriksa dan menghapus tugas yang telah selesai
-function periksaTugasSelesai() {
-  hapusTugasSelesai();
-  tampilkanTabelStatus(); // Memperbarui tampilan tabel setelah penghapusan
-}
-
-
 // Ubah status tugas melalui tombol status
 document.getElementById('statusButtons').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
   if (!btn || !simpulTugasDipilih) return;
   const status = btn.getAttribute('data-status');
+  // perbarui status pada simpul terpilih
   simpulTugasDipilih.data.status = status;
-  tampilkanTabelStatus();
-  alert('Status tugas diperbarui');
-  // simpan perubahan status ke localStorage
-  simpanData();
-  
-  // Periksa dan hapus tugas yang sudah selesai
-  if (status === 'Selesai') {
-    periksaTugasSelesai();
+  // Jika status menandakan tugas telah selesai, hapus tugas dari daftar
+  if (status === 'Telah dikerjakan' || status === 'Selesai') {
+    // hapus semua tugas yang selesai
+    hapusTugasSelesai();
+    // reset simpul terpilih karena bisa jadi sudah terhapus
+    simpulTugasDipilih = null;
+    // perbarui antrian deadline dan tampilan tabel
+    perbaruiAntrianDeadline();
+    tampilkanTabelStatus();
+    alert('Tugas selesai dihapus');
+  } else {
+    // jika tidak selesai, cukup tampilkan tabel yang diperbarui
+    tampilkanTabelStatus();
+    alert('Status tugas diperbarui');
   }
+  // simpan perubahan (baik status maupun penghapusan) ke localStorage
+  simpanData();
 });
-
 
 // Klik baris pada tabel deadline
 document.getElementById('deadlineTable').addEventListener('click', (e) => {
@@ -513,7 +519,13 @@ document.getElementById('lihatCatatanTable').addEventListener('click', (e) => {
 
 // Inisialisasi antrian deadline setelah konten dimuat
 document.addEventListener('DOMContentLoaded', () => {
-  // muat data dari localStorage jika ada
+  // Muat data dari localStorage jika tersedia
   muatData();
+  // Hapus tugas yang sudah selesai (status "Telah dikerjakan" atau "Selesai") setelah data dimuat
+  // sehingga tugas yang telah selesai dari sesi sebelumnya tidak muncul lagi.
+  hapusTugasSelesai();
+  // Simpan ulang data untuk menyinkronkan perubahan penghapusan dengan localStorage
+  simpanData();
+  // Perbarui antrian deadline berdasarkan data yang tersisa
   perbaruiAntrianDeadline();
 });
