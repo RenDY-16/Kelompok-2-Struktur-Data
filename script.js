@@ -197,20 +197,15 @@ function kirimNotifikasiWhatsApp(tugas) {
   const pesan = encodeURIComponent(`Pengingat: Tugas "${tugas.name}" akan segera berakhir pada ${tugas.deadline}.`);
   // Membuka tab/jendela WhatsApp baru dengan pesan yang sudah terisi.
   const url = `https://wa.me/${nomorWhatsApp}?text=${pesan}`;
-
   // buka WhatsApp di tab baru dengan pesan yang sudah terisi
-  window.open(url, '_blank');}
+  window.open(url, '_blank');
+}
 
-
-
-
-
-// Memperbarui antrian deadline berdasarkan tugas yang dekat dengan batas waktu
 function perbaruiAntrianDeadline() {
   antrianDeadline.clear();
   const hariIni = new Date();
   const segera = new Date();
-  segera.setDate(hariIni.getDate() + 1); // 1 hari ke depan
+  segera.setDate(hariIni.getDate() + 3); 
   daftarTugas.toArray().forEach(node => {
     const d = new Date(node.data.deadline);
     if (node.data.deadline) {
