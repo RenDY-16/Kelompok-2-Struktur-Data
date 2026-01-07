@@ -81,6 +81,69 @@ const daftarTugas = new DoublyLinkedList();       // Menyimpan semua tugas
 const daftarCatatan = new DoublyLinkedList();     // Menyimpan semua catatan
 const antrianDeadline = new Queue();              // Menyimpan tugas yang mendekati deadline
 
+// ---------------------- Persistensi Data (localStorage) ----------------------
+// Fungsi untuk menyimpan data tugas, catatan, dan penghitung ID ke localStorage
+function simpanData() {
+  try {
+    // konversi isi linked list menjadi array data mentah
+    const tugasArr = daftarTugas.toArray().map(node => node.data);
+    const catatanArr = daftarCatatan.toArray().map(node => node.data);
+    // simpan array dan penghitung ke localStorage sebagai string JSON
+    localStorage.setItem('daftarTugas', JSON.stringify(tugasArr));
+    localStorage.setItem('daftarCatatan', JSON.stringify(catatanArr));
+    localStorage.setItem('penghitungTugas', penghitungTugas.toString());
+    localStorage.setItem('penghitungCatatan', penghitungCatatan.toString());
+  } catch (e) {
+    console.error('Gagal menyimpan data ke localStorage:', e);
+  }
+}
+
+// Fungsi untuk memuat data dari localStorage dan merekonstruksi struktur data
+function muatData() {
+  try {
+    // baca dan parse array tugas dan catatan
+    const savedTasks = localStorage.getItem('daftarTugas');
+    const savedNotes = localStorage.getItem('daftarCatatan');
+    if (savedTasks) {
+      const tasksArray = JSON.parse(savedTasks);
+      tasksArray.forEach(item => {
+        // setiap item sudah berupa objek tugas lengkap (id, name, desc, deadline, status)
+        daftarTugas.append(item);
+      });
+    }
+    if (savedNotes) {
+      const notesArray = JSON.parse(savedNotes);
+      notesArray.forEach(item => {
+        // setiap item sudah berupa objek catatan (id, title, content)
+        daftarCatatan.append(item);
+      });
+    }
+    // Pulihkan penghitung jika tersedia, jika tidak gunakan id terbesar + 1
+    const savedPenghitungTugas = localStorage.getItem('penghitungTugas');
+    if (savedPenghitungTugas !== null) {
+      penghitungTugas = parseInt(savedPenghitungTugas, 10);
+    } else {
+      const arr = daftarTugas.toArray();
+      if (arr.length > 0) {
+        const maxId = Math.max(...arr.map(n => n.data.id));
+        penghitungTugas = maxId + 1;
+      }
+    }
+    const savedPenghitungCatatan = localStorage.getItem('penghitungCatatan');
+    if (savedPenghitungCatatan !== null) {
+      penghitungCatatan = parseInt(savedPenghitungCatatan, 10);
+    } else {
+      const arr = daftarCatatan.toArray();
+      if (arr.length > 0) {
+        const maxId = Math.max(...arr.map(n => n.data.id));
+        penghitungCatatan = maxId + 1;
+      }
+    }
+  } catch (e) {
+    console.error('Gagal memuat data dari localStorage:', e);
+  }
+}
+
 // Variabel untuk simpul yang sedang dipilih
 let simpulTugasDipilih = null;
 let simpulCatatanDipilih = null;
@@ -107,6 +170,8 @@ function tambahTugas(nama, deskripsi, batasWaktu) {
   };
   daftarTugas.append(tugas);
   perbaruiAntrianDeadline();
+  // simpan perubahan ke localStorage setelah menambah tugas
+  simpanData();
 }
 
 const nomorWhatsApp = '+6287770693898';
@@ -329,6 +394,8 @@ document.getElementById('statusButtons').addEventListener('click', (e) => {
   simpulTugasDipilih.data.status = status;
   tampilkanTabelStatus();
   alert('Status tugas diperbarui');
+  // simpan perubahan status ke localStorage
+  simpanData();
 });
 
 // Klik baris pada tabel deadline
@@ -356,6 +423,8 @@ document.getElementById('updateDeadline').addEventListener('click', () => {
   perbaruiAntrianDeadline();
   tampilkanTabelDeadline();
   alert('Deadline tugas diperbarui');
+  // simpan perubahan deadline ke localStorage
+  simpanData();
 });
 
 // Simpan catatan baru
@@ -373,6 +442,8 @@ document.getElementById('saveNote').addEventListener('click', () => {
   document.getElementById('noteTitle').value = '';
   document.getElementById('noteContent').value = '';
   alert('Catatan berhasil ditambahkan');
+  // simpan perubahan catatan ke localStorage
+  simpanData();
 });
 
 // Klik baris pada tabel edit catatan
@@ -398,6 +469,8 @@ document.getElementById('updateNote').addEventListener('click', () => {
   simpulCatatanDipilih.data.title = judul;
   simpulCatatanDipilih.data.content = isi;
   alert('Catatan diperbarui');
+  // simpan perubahan catatan ke localStorage
+  simpanData();
   tampilkanTabelEditCatatan();
   tampilkanHalaman('editCatatanSelectPage');
 });
@@ -415,5 +488,7 @@ document.getElementById('lihatCatatanTable').addEventListener('click', (e) => {
 
 // Inisialisasi antrian deadline setelah konten dimuat
 document.addEventListener('DOMContentLoaded', () => {
+  // muat data dari localStorage jika ada
+  muatData();
   perbaruiAntrianDeadline();
 });
